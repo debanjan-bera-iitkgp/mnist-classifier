@@ -2,7 +2,7 @@
 # Step-by-step implementation from scratch
 
 # ============================================
-# ✅ STEP 1 - Imports
+#  STEP 1 - Imports
 # ============================================
 import torch
 import torch.nn as nn
@@ -11,23 +11,23 @@ import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
 
 # ============================================
-# ✅ STEP 2 - Set Device (CPU for now, GPU ready)
+#  STEP 2 - Set Device (CPU for now, GPU ready)
 # ============================================
 device = torch.device("cpu")
 # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")  # Uncomment for GPU
 print(f"Using device: {device}")
 
 # ============================================
-# ✅ STEP 3 - Define Hyperparameters
+#  STEP 3 - Define Hyperparameters
 # ============================================
 batch_size = 64
 learning_rate = 0.001
 epochs = 5
 
 # ============================================
-# ✅ STEP 4 - Load MNIST Dataset
+#  STEP 4 - Load MNIST Dataset
 # ============================================
-print("\n📁 Loading MNIST dataset...")
+print("\n Loading MNIST dataset...")
 
 # 4.1 Define the transform - convert images to tensors
 transform = transforms.Compose([
@@ -64,22 +64,22 @@ test_loader = DataLoader(
 )
 
 # 4.5 Verify data loading
-print(f"✅ Training dataset: {len(train_dataset)} images")
-print(f"✅ Test dataset: {len(test_dataset)} images")
-print(f"✅ Training batches: {len(train_loader)}")
-print(f"✅ Test batches: {len(test_loader)}")
+print(f" Training dataset: {len(train_dataset)} images")
+print(f" Test dataset: {len(test_dataset)} images")
+print(f" Training batches: {len(train_loader)}")
+print(f" Test batches: {len(test_loader)}")
 
 # Check one batch
 data_iter = iter(train_loader)
 images, labels = next(data_iter)
-print(f"\n📊 Batch shape: {images.shape}")  # [64, 1, 28, 28]
-print(f"📊 Labels shape: {labels.shape}")   # [64]
-print(f"📊 Pixel range: [{images.min():.3f}, {images.max():.3f}]")
+print(f"\n Batch shape: {images.shape}")  # [64, 1, 28, 28]
+print(f" Labels shape: {labels.shape}")   # [64]
+print(f" Pixel range: [{images.min():.3f}, {images.max():.3f}]")
 
 # ============================================
-# ✅ STEP 5 - Define Neural Network Class
+#  STEP 5 - Define Neural Network Class
 # ============================================
-print("\n🧠 Building neural network...")
+print("\n Building neural network...")
 
 class MNISTClassifier(nn.Module):
     def __init__(self):
@@ -116,21 +116,21 @@ print(model)
 # Count parameters
 total_params = sum(p.numel() for p in model.parameters())
 trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
-print(f"\n📊 Model parameters: {total_params:,} total, {trainable_params:,} trainable")
+print(f"\n Model parameters: {total_params:,} total, {trainable_params:,} trainable")
 
 # ============================================
-# ✅ STEP 6 - Define Loss Function and Optimizer
+#  STEP 6 - Define Loss Function and Optimizer
 # ============================================
 criterion = nn.CrossEntropyLoss()  # Combines LogSoftmax + NLLLoss
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
-print(f"\n⚙️ Loss function: CrossEntropyLoss")
-print(f"⚙️ Optimizer: Adam (lr={learning_rate})")
+print(f"\n Loss function: CrossEntropyLoss")
+print(f" Optimizer: Adam (lr={learning_rate})")
 
 # ============================================
-# ✅ STEP 7 - Training Loop
+#  STEP 7 - Training Loop
 # ============================================
-print("\n🎯 Starting training...")
+print("\n Starting training...")
 print("-" * 60)
 
 for epoch in range(epochs):
@@ -171,16 +171,16 @@ for epoch in range(epochs):
     # Epoch statistics
     epoch_loss = running_loss / len(train_loader)
     epoch_acc = 100 * correct / total
-    print(f'\n📌 Epoch [{epoch+1}/{epochs}] - '
+    print(f'\n Epoch [{epoch+1}/{epochs}] - '
           f'Average Loss: {epoch_loss:.4f}, Training Accuracy: {epoch_acc:.2f}%')
     print("-" * 60)
 
-print("✅ Training completed!")
+print(" Training completed!")
 
 # ============================================
-# ✅ STEP 8 - Test the Model
+#  STEP 8 - Test the Model
 # ============================================
-print("\n🧪 Testing model on test dataset...")
+print("\n Testing model on test dataset...")
 
 model.eval()  # Set to evaluation mode
 correct = 0
@@ -195,21 +195,21 @@ with torch.no_grad():  # No gradients needed for testing
         correct += (predicted == labels).sum().item()
 
 test_accuracy = 100 * correct / total
-print(f"\n🎯 Test Accuracy: {test_accuracy:.2f}%")
-print(f"✅ Correctly classified: {correct}/{total} images")
+print(f"\n Test Accuracy: {test_accuracy:.2f}%")
+print(f" Correctly classified: {correct}/{total} images")
 
 # ============================================
-# ✅ STEP 9 - Save the Model
+#  STEP 9 - Save the Model
 # ============================================
-print("\n💾 Saving model...")
+print("\n Saving model...")
 
 # Save the entire model
 torch.save(model, 'mnist_model_complete.pth')
-print("✅ Model saved as 'mnist_model_complete.pth'")
+print(" Model saved as 'mnist_model_complete.pth'")
 
 # Save just the state_dict (recommended)
 torch.save(model.state_dict(), 'mnist_model_state_dict.pth')
-print("✅ Model state dict saved as 'mnist_model_state_dict.pth'")
+print(" Model state dict saved as 'mnist_model_state_dict.pth'")
 
 # Save checkpoint with more info
 checkpoint = {
@@ -220,12 +220,12 @@ checkpoint = {
     'model_architecture': str(model)
 }
 torch.save(checkpoint, 'mnist_model_checkpoint.pth')
-print("✅ Checkpoint saved as 'mnist_model_checkpoint.pth'")
+print(" Checkpoint saved as 'mnist_model_checkpoint.pth'")
 
 # ============================================
-# ✅ STEP 10 - Quick Demo: Predict a single image
+#  STEP 10 - Quick Demo: Predict a single image
 # ============================================
-print("\n🔍 Quick prediction demo...")
+print("\n Quick prediction demo...")
 
 model.eval()
 with torch.no_grad():
@@ -245,4 +245,4 @@ with torch.no_grad():
     print(f"   True label: {true_label}")
     print(f"   Predicted: {predicted_label} (confidence: {confidence:.2%})")
 
-print("\n✨ All done! Your MNIST classifier is ready! ✨")
+print("\n All done! Your MNIST classifier is ready! ")
