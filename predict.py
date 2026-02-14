@@ -2,11 +2,10 @@ import torch
 import torch.nn as nn
 from PIL import Image
 import numpy as np
-import matplotlib.pyplot as plt  # Added for visualization
+import matplotlib.pyplot as plt  
 
-# ============================================
-#  Define the EXACT same model architecture (must match training)
-# ============================================
+#  Define the EXACT same model architecture 
+
 class MNISTClassifier(nn.Module):
     def __init__(self):
         super(MNISTClassifier, self).__init__()
@@ -22,9 +21,9 @@ class MNISTClassifier(nn.Module):
     def forward(self, x):
         return self.network(x)
 
-# ============================================
+
 #  Load trained model with error handling
-# ============================================
+
 def load_model(model_path='mnist_model_state_dict.pth'):
     """Load trained MNIST model with proper error handling"""
     device = torch.device("cpu")
@@ -44,9 +43,9 @@ def load_model(model_path='mnist_model_state_dict.pth'):
         print(f" Error loading model: {e}")
         return None, None
 
-# ============================================
-# 🔹 Preprocessing pipeline (more accurate)
-# ============================================
+
+#  Preprocessing pipeline (more accurate)
+
 def preprocess_image(image_path):
     """
     Preprocess image to match MNIST format exactly:
@@ -70,7 +69,7 @@ def preprocess_image(image_path):
         img_array = np.array(img, dtype=np.float32)
         
         # MNIST has white digit (255) on black background (0)
-        # Check if image has white background (common in handwritten scans)
+       
         background_value = img_array[0, 0]  # Top-left pixel
         if background_value > 127:  # Light background
             img_array = 255 - img_array  # Invert colors
@@ -90,9 +89,9 @@ def preprocess_image(image_path):
         print(f" Error preprocessing image: {e}")
         return None, None
 
-# ============================================
+
 #  Prediction function with visualization
-# ============================================
+
 def predict_digit(model, device, image_path, show_plot=True):
     """Predict digit from image with visualization"""
     
@@ -101,7 +100,7 @@ def predict_digit(model, device, image_path, show_plot=True):
     if img_tensor is None:
         return None, None
     
-    # Move to device
+    
     img_tensor = img_tensor.to(device)
     
     # Prediction
@@ -139,9 +138,9 @@ def predict_digit(model, device, image_path, show_plot=True):
     
     return predicted_label, confidence
 
-# ============================================
+
 #  Batch prediction for multiple images
-# ============================================
+
 def predict_batch(model, device, image_paths):
     """Predict digits for multiple images"""
     results = []
@@ -156,9 +155,9 @@ def predict_batch(model, device, image_paths):
     
     return results
 
-# ============================================
+
 #  Interactive mode
-# ============================================
+
 def interactive_predict():
     """Interactive prediction mode"""
     model, device = load_model()
@@ -181,9 +180,9 @@ def interactive_predict():
         if digit is not None:
             print(f" Prediction: {digit} (Confidence: {confidence:.2%})")
 
-# ============================================
-# 🔹 Test with MNIST test set (for validation)
-# ============================================
+
+#  Test with MNIST test set 
+
 def test_with_mnist_sample():
     """Test the model on a real MNIST test image"""
     try:
@@ -196,11 +195,11 @@ def test_with_mnist_sample():
             root='./data', train=False, transform=transform, download=True
         )
         
-        # Get a random sample
+       
         idx = np.random.randint(len(test_dataset))
         img_tensor, true_label = test_dataset[idx]
         
-        # Add batch dimension
+        
         img_tensor = img_tensor.unsqueeze(0)
         
         # Predict
@@ -224,30 +223,22 @@ def test_with_mnist_sample():
     except ImportError:
         print("  torchvision not installed. Skipping MNIST test.")
 
-# ============================================
+
 #  Main execution
-# ============================================
+
 if __name__ == "__main__":
-    # Load model
+  
     model, device = load_model()
     
     if model is not None:
-        # Option 1: Test with MNIST sample
+        
         print("\n Testing with random MNIST test image...")
         test_with_mnist_sample()
         
-        # Option 2: Single image prediction
-        image_path = "my_digit.png"  # Replace with your image
+      
+        image_path = "my_digit.png"  
         print(f"\n Predicting '{image_path}'...")
         digit, conf = predict_digit(model, device, image_path)
         if digit is not None:
             print(f" Final Prediction: {digit} (Confidence: {conf:.2%})")
         
-        # Option 3: Interactive mode (uncomment to use)
-        # interactive_predict()
-        
-        # Option 4: Batch prediction example
-        # batch_images = ["digit1.png", "digit2.png", "digit3.png"]
-        # results = predict_batch(model, device, batch_images)
-        # for r in results:
-        #     print(f"{r['image']}: {r['prediction']} ({r['confidence']:.2%})")
